@@ -1,0 +1,17 @@
+<div class="right-content">
+	<div class="middle-menu">
+		<header class="bar bar-header" >
+	       <h1 class="title">菜单</h1>
+	    </header>
+	    <ion-content class="has-header">
+		    <ion-list>
+			    <ion-item ng-repeat="item in items" ng-click="clickMenu(item);">
+			        Hello, {{item.title}}!
+			    </ion-item>
+		    </ion-list>
+	    </ion-content>
+	</div>
+	<div class="right-data">
+		<ion-nav-view name="dataContent"></ion-nav-view>
+	</div>
+</div>
