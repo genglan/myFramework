@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers','starter.services'],function ($httpProvider){
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    var param = function(obj) {
+  var param = function(obj) {
     var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
         for(name in obj) {
           value = obj[name];
