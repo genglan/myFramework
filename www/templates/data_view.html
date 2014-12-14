@@ -1,14 +1,12 @@
-<div class="data-view">
-	<header class="bar bar-header" ng-show="cancle_but">
-		<div class="buttons" >
-	    	<button class="button"  onclick="javascript:history.go(-1);">back</button>
-	  	</div>
-	   <h1 class="title">{{title}}</h1>
-	</header>
-	<ion-content class="has-header">
-	   	<div class="data-info" ng-show="cancle_but">Hello, {{title}}!</div>
-	    <div class="img-none" ng-show="!cancle_but">
-			<img src="img/none.png"/>
-		</div>
-	</ion-content>
-</div>
+<ion-view>
+	<div class="data-view">
+		<header class="bar bar-header" >
+			<button  class="button" ng-click="closePage();">close</button>
+	        <h1 class="title">菜单</h1>
+			<button class="button">update</button>
+	    </header>
+		<ion-content class="has-header">
+		   	Hello, {{title}}!
+		</ion-content>
+	</div>
+</ion-view>

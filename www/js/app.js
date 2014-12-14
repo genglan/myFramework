@@ -4,43 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','starter.services'],function ($httpProvider){
-  $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-  var param = function(obj) {
-    var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
-        for(name in obj) {
-          value = obj[name];
-            
-          if(value instanceof Array) {
-            for(i=0; i<value.length; ++i) {
-              subValue = value[i];
-              fullSubName = name + '[' + i + ']';
-              innerObj = {};
-              innerObj[fullSubName] = subValue;
-              query += param(innerObj) + '&';
-            }
-          }
-          else if(value instanceof Object) {
-            for(subName in value) {
-              subValue = value[subName];
-              fullSubName = name + '[' + subName + ']';
-              innerObj = {};
-              innerObj[fullSubName] = subValue;
-              query += param(innerObj) + '&';
-            }
-          }
-          else if(value !== undefined && value !== null)
-            query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
-        }
-          
-        return query.length ? query.substr(0, query.length - 1) : query;
-      };
-
-      // Override $http service's default transformRequest
-      $httpProvider.defaults.transformRequest = [function(data) {
-        return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
-      }];
-})
+angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -63,27 +27,42 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'],fu
       templateUrl: "templates/menu.html",
       controller:'MainCtrl'
     })
-    .state('menu.list', {
-      url: "/list",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/menu_list.html",
-          controller:'MenuCtrl'
-        }
-      }
-    }) 
+    
     if('pad' == platform){
-      $stateProvider.state('menu.list.data_view', {
+      $stateProvider
+      .state('menu.list', {
+        url: "/list",
+        views: {
+          'menuContent' :{
+            templateUrl: "templates/menu_list.html",
+            controller:'MenuCtrl'
+          },
+          'dataContent@menu.list':{
+            templateUrl: "templates/none.html",
+          }
+        }
+      })
+      .state('menu.list.data_view', {
         url: "/data_view/:id",
         views: {
-          'dataContent' :{
+          'dataContent@menu.list' :{
             templateUrl: "templates/data_view.html",
             controller:'DataCtrl'
           }
         }
       })
     }else{
-      $stateProvider.state('data_view', {
+      $stateProvider
+      .state('menu.list', {
+        url: "/list",
+        views: {
+          'menuContent' :{
+            templateUrl: "templates/menu_list.html",
+            controller:'MenuCtrl'
+          }
+        }
+      }) 
+      .state('data_view', {
         url: "/data_view/:id",
         templateUrl: "templates/data_view.html",
         controller:'DataCtrl'

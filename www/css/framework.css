@@ -1,13 +1,4 @@
 /* Empty. Add your own CSS if you like */
-
-@-webkit-keyframes animations-left{
-    0%   {left:20%}
-    25%  {left:100%;}
-}
-@-webkit-keyframes animations-right{
-    25%   {left:20%}
-    0%  {left:100%;}
-}
 *{
 	padding: 0;
 	margin: 0;
@@ -22,47 +13,30 @@ ion-nav-view{
 	width:100%;
 	height:100%;
 }
-.bar.bar-header {
-	background:#f8f8f8;
+.middle-menu{
+	position: absolute;
+	z-index:999;
+	left: 0;
+	width: 20%;
+	height: 100%;
+	border-right: 1px #ccc solid;
 }
-.data-info {
+.right-data{
+	position: absolute;
+	left: 20%;
+	width:80%;
+	height:100%;
+}
+.img-none{
 	text-align: center;
 }
-/*平板*/
-@media only screen and (min-width: 640px){
-    .data-view.ng-enter {
-        -webkit-animation:animations-left 0.5s;
-    }
-    .data-view.ng-leave {
-        -webkit-animation:animations-right 0.00005s;
-    }
-    .middle-menu {
-		position: absolute;
-		z-index:999;
-		left: 0;
-		width: 20%;
-		height: 100%;
-		border-right: 1px #ccc solid;
-    }
-    .right-data{
-    	position: absolute;
-    	left: 20%;
-    	width:80%;
-    	height:100%;
-    }
-    .img-none{
-		text-align: center;
-	}
-	.img-none img{
-		width: 20%;
-		margin-top: 25%;
-	}
+.img-none img{
+	width: 20%;
+	margin-top: 25%;
 }
 /*手机*/
 @media only screen and (max-width: 640px){
 	.middle-menu {
-		position: absolute;
-		left: 0;
 		width: 100%;
 		height: 100%;
 		border-right: none;
