@@ -18,15 +18,12 @@ angular.module('starter.controllers', [])
 			$state.go('data_view',{'id':item.id});
 		}	
     }
-    //关闭
-    $scope.closePage = function (){
-    	if('pad' == platform){
-    		$state.go('menu.list');
-    	}
-	
-    }
 })
 //数据展示
-.controller('DataCtrl', function($scope,$stateParams) {
+.controller('DataCtrl', function($scope,$state,$stateParams) {
 	$scope.title =  $stateParams.id
+	//关闭
+    $scope.closePage = function (){
+    	$state.go('menu.list');
+    }
 })
