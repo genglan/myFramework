@@ -1,0 +1,505 @@
+
+/***************************************************/
+.bg-grey{
+	background: #f7f7f7;
+}
+.steps{
+	position: absolute;
+	top:44px;
+	width: 100%;
+}
+.refund-step {
+	height: 40px;
+	padding: 50px 20px;
+	margin-top: 20px;
+}
+
+.refund-step-bar li, .refund-step-bar .refund-step-cur .refund-step-status, .refund-step-bar .refund-step-start-cur .refund-step-status, .refund-step-bar .refund-step-end-cur, .refund-step .refund-step-start-done .refund-step-status {
+	background: url(../img/steps.png) 0 0 no-repeat
+}
+
+.refund-step-bar {
+	height: 10px;
+	background-color: #dedede;
+	margin-left: 100px;
+}
+
+.refund-step-bar li {
+	color: #888;
+	float: left;
+	position: relative;
+	height: 30px;
+	margin-top: -10px;
+}
+
+.refund-step-bar .refund-step-start, .refund-step-bar .refund-step-start-cur, .refund-step-bar .refund-step-start-done {
+	margin-left: 0
+}
+
+.refund-step-bar .refund-step-name {
+	position: relative;
+	float: left;
+	top: -30px;
+	margin-top: -30px;
+	margin-left: -20px;
+	white-space: nowrap;
+	font-size: 16px;
+}
+
+.refund-step-bar .refund-step-no {
+	display: block;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+	font-size: 16px;
+	*position: relative;
+	*z-index: 2
+}
+
+.refund-step-bar .refund-step-done, .refund-step-bar .refund-step-cur {
+	background-position: 0 -30px
+}
+
+.refund-step-bar .refund-step-start {
+	background-position: 0 -60px
+}
+
+.refund-step-bar .refund-step-start-done, .refund-step-bar .refund-step-start-cur {
+	background-position: 0 -30px
+}
+.refund-step-bar .refund-step-end {
+	/*background-position: 0 0px*/
+}
+
+.refund-step-bar .refund-step-end-done, .refund-step-bar .refund-step-end-cur {
+	background-position: 0 -30px
+}
+.refund-step-bar .refund-step-done .refund-step-status, .refund-step-bar .refund-step-start-done .refund-step-status, .refund-step-bar .refund-step-end-done .refund-step-status, .refund-step-bar .refund-step-cur .refund-step-status, .refund-step-bar .refund-step-start-cur .refund-step-status, .refund-step-bar .refund-step-end-cur .refund-step-status {
+	display: block;
+	height: 10px;
+	background-color: #d23f15;
+	margin-top: -20px;
+	font-size: 0;
+	overflow: hidden
+}
+.refund-step-bar .refund-step-cur .refund-step-status, .refund-step-bar .refund-step-start-cur .refund-step-status, .refund-step-bar .refund-step-end-cur .refund-step-status, .refund-step .refund-step-start-done .refund-step-status {
+	width: 50%;
+	padding-right: 17px;
+	background-position: right -210px
+}
+.refund-step-bar .refund-step-done .refund-step-status, .refund-step-bar .refund-step-start-done .refund-step-status, .refund-step-bar .refund-step-end-done .refund-step-status {
+	width: auto;
+	padding: 0
+}
+
+.refund-step-bar .refund-step-start .refund-step-status, .refund-step-bar .refund-step-start-cur .refund-step-status, .refund-step-bar .refund-step-start-done .refund-step-status {
+	margin-left: 5px;
+	padding-right: 12px
+}
+
+.refund-step-bar .refund-step-end .refund-step-status, .refund-step-bar .refund-step-end-cur .refund-step-status, .refund-step-bar .refund-step-end-done .refund-step-status {
+	margin-right: 5px;
+	padding: 0
+}
+
+.refund-step-2 .refund-step-start .refund-step-status, .refund-step-2 .refund-step-start-cur .refund-step-status, .refund-step-2 .refund-step-start-done .refund-step-status {
+	padding: 0
+}
+
+.refund-step-5 li {
+	width: 25%;
+	margin-left: -9px
+}
+.refund-step-bar .refund-step-end, .refund-step-bar .refund-step-end-cur, .refund-step-bar .refund-step-end-done {
+	width: 30px;
+	margin-left: -30px;
+	margin-right: 0;
+	float: right
+}
+.first-left-bar{
+	height: 10px;
+	width: 120px;
+	vertical-align: baseline;
+	position: absolute;
+	top: 10px;
+	left: -119px;
+}
+.first-left-bar01,.first-left-bar02,.first-left-bar03{
+	display: inline-block;
+	float: right;
+	height: 10px;
+}
+.first-left-bar01{
+	background-color: #d23f15;
+	width: 50px;
+	margin-left: 10px;
+}
+.first-left-bar02{
+	background-color: #df886d;
+	width: 30px;
+	margin-left: 10px;
+}
+.first-left-bar03{
+	background-color: #ebbfb2;
+	width: 20px;
+}
+
+.refund-step-bar .refund-step-start-cur .refund-step-name,.refund-step-bar .refund-step-cur .refund-step-name,.refund-step-bar .refund-step-done .refund-step-name,.refund-step-bar .refund-step-start-done .refund-step-name,.refund-step-bar .refund-step-end-done .refund-step-name{
+	color:#d23f15
+}
+
+.refund-step-bar .refund-step-end .refund-step-status, .refund-step-bar .refund-step-end-cur .refund-step-status, .refund-step-bar .refund-step-end-done .refund-step-status {
+	_position: absolute;
+	padding-left: 5px
+}
+/**********************/
+.insure-tab-menu{
+	/*position: absolute;
+	top:164px;*/
+	width: 100%;
+}
+.has-top {
+	top:40px;
+	margin: 0 10px;
+}
+.has-border{
+	border: 1px solid #e6e6e6;
+	/*border-top: none ;*/
+	background: #fff;
+	margin-top: -1px;
+}
+.insure-tabs{
+	position: absolute;
+	top: 164px;
+	width: 100%;
+	bottom:70px;
+}
+.tab-content.tab-bordered {
+}
+.nav-tabs{
+	margin: 0 10px;
+	border: 1px solid #e6e6e6;
+	border-top-left-radius:4px;
+	border-top-right-radius:4px;
+}
+.nav-tabs:after{
+	content: '';
+	clear: both;
+	height: 0;
+	visibility: hidden;
+	display: block;
+}
+.nav-tabs li{
+	float: left;
+	line-height: 38px;
+	margin: 0 20px;
+}
+.nav-tabs li.active a{
+	color: #d23f15;
+}
+.nav-tabs li a{
+	color: #888;
+}
+.checkbox input, .checkbox-icon {
+	position: relative;
+	width: 22px;
+	height: 22px;
+	display: block;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	-webkit-appearance: none;
+}
+.checkbox input:before, .checkbox .checkbox-icon:before {
+	border-color: #da340a;
+}
+.checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
+	background: #da340a;
+}
+.checkbox input:checked::before, .checkbox input:checked + .checkbox-icon::before{
+	background: #fff;
+}
+.checkbox input::after, .checkbox-icon::after{
+	-webkit-transition: opacity 0.05s ease-in-out;
+	-moz-transition: opacity 0.05s ease-in-out;
+	transition: opacity 0.05s ease-in-out;
+	-webkit-transform: rotate(-55deg);
+	-moz-transform: rotate(-55deg);
+	transform: rotate(-55deg);
+	position: absolute;
+	top: 30%;
+	left: 26%;
+	display: table;
+	width: 12px;
+	height: 7px;
+	border: 1px solid #d23f15;
+	border-top: 0;
+	border-right: 0;
+	content: ' ';
+	opacity: 0;
+}
+.checkbox input:checked:before, input:checked + .checkbox-icon:before {
+	border-width: 1px;
+}
+.checkbox-agree{
+	color: #da340a;
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 16px;
+	font-size: 16px;
+	/*text-align: center;*/
+	width: 120px;
+	margin: 0 auto;
+}
+.checkbox-agree span{
+	vertical-align: 6px;
+	padding-left: 30px;
+}
+
+.button.button-light-red {
+	border-color: #d14014;
+	background-color: #fff;
+	color: #d14014;
+	padding: 0px 50px;
+	margin: 0 auto;
+}
+.button.button-light-grey {
+	border-color: #cfcfcf;
+	background-color: #fff;
+	color: #cfcfcf;
+	padding: 0px 50px;
+	margin: 0 auto;
+}
+.footer-btns{
+	width: 310px;
+	margin: 0 auto;
+	text-align: center;
+}
+div.bar.bar-footer.footer-btn-bar{
+	font-size: 16px;
+	padding: 8px 0;
+	height: 60px;
+	border-top:1px solid #cfcfcf ;
+}
+.footer-btn-bar .button{
+	min-height: 40px;
+	line-height: 40px;
+}
+.footer-btn-bar .button:first-child{
+	margin-right: 20px;
+}
+.has-bottom{
+	bottom:60px;
+}
+.tab-con-inner{
+	padding: 10px 12px;
+}
+.insure-edit-icon{
+	background: url(../img/editor-black.png) no-repeat;
+	display: inline-block;
+	background-size: 100%;
+	width: 20px;
+	height: 20px;
+}
+.text-right{
+	text-align: right;
+	/*vertical-align: middle;*/
+}
+.color-red{
+	color:#da340a;
+}
+.color-gray{
+	color: #888;
+}
+.margin-top-15{
+	margin-top: 15px !important;
+}
+.margin-top-10{
+	margin-top: 10px !important;
+}
+.content-bottom{
+	padding: 25px;
+	text-align: center;
+}
+.btn-save{
+	background: #da340a;
+	border: none;
+	border-radius: 3px;
+	text-align: center;
+	line-height: 36px;
+	padding: 0 50px;
+	color: #fff;
+}
+.ion-insure-add{
+	background: url(../img/add_red.png) no-repeat;
+	display: inline-block;
+	background-size: 100%;
+	width: 16px;
+	height: 16px;
+}
+.ion-insure-moveout{
+	background: url(../img/moveout.png) no-repeat;
+	display: inline-block;
+	background-size: 100%;
+	width: 16px;
+	height: 16px;
+}
+.insure-edit{
+	position: relative;
+	display: inline-block;
+}
+.insure-edit.item-icon-left{
+	padding-left: 24px;
+	color:#000;
+}
+.insure-edit.item-icon-left .icon{
+	top:12px;
+	left: 0;
+}
+.info-table{
+	width: 100%;
+	/*margin-top: 10px;*/
+}
+.info-table th{
+	color: #888;
+}
+.info-table th,.info-table td{
+	line-height: 32px;
+	text-align: center;
+	padding: 2px;
+}
+.info-table tr:nth-of-type(odd){
+	background: #fBfBfB;
+}
+div.row.bg-gray{
+	background: #f7f7f7;
+}
+div.row.bg-white{
+	background: #fff;
+}
+.select-group{
+	position: relative;
+	height: 28px;
+}
+i.input-arror-right {
+	position: absolute;
+	top: 0;
+	right: 16px;
+	color: #bbb;
+	margin-top: -2px;
+	/*width: 0;
+	height: 0;
+	border-top: 5px solid;
+	border-right: 5px solid rgba(0, 0, 0, 0);
+	border-left: 5px solid rgba(0, 0, 0, 0);
+	color: #999;
+	content: "";
+	pointer-events: none;*/
+}
+.select-group select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 8px 50px 8px 10px;
+	width: 100%;
+	border: 1px solid #e8e8e8;
+	background: #fff;
+	color: #333;
+	text-indent: 0.01px;
+	text-overflow: '';
+	white-space: nowrap;
+	font-size: 14px;
+	cursor: pointer;
+	direction: ltr;
+}
+input.text-style{
+	border: 1px solid #e8e8e8;
+	border-radius: 5px;
+	padding-left: 10px;
+	height: 35px;
+	padding-bottom: 2px;
+	-webkit-appearance:none;
+}
+textarea.text-style{
+	border: 1px solid #e8e8e8;
+	border-radius: 5px;
+	min-height: 60px;
+	padding: 5px 10px;
+	-webkit-appearance:none;
+}
+.tip-check{
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 0 12px;
+}
+.tip-check span{
+	vertical-align: 6px;
+	padding-left: 30px;
+}
+.bool-radio{
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 0 12px;
+	width: 70px;
+	float: right;
+}
+.bool-radio.item-checkbox .checkbox{
+	margin-top: -18px;
+}
+.relation-radio{
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 0 12px;
+	width: 85px;
+	float: left;
+}
+.relation-radio.item-checkbox .checkbox{
+	margin-top: -18px;
+}
+.tab-panel p{
+	line-height: 1.5;
+}
+.camara{
+	display: -webkit-box;
+	/*height: 240px;*/
+}
+.camara li{
+	-webkit-box-flex: 1;
+	background: #fafafa;
+	/*background-size: 100%;*/
+	border: 1px solid #d23f14;
+	text-align: center;
+	margin:10px 50px;
+	border-radius: 4px;
+	width: 100%;
+	/*height: 100%;*/
+	position: relative;
+}
+
+.camara li span{
+	display: block;
+	margin-top: 5px;
+	color: #d23f14;
+	position: absolute;
+	top: 58%;
+	left: 50%;
+	width: 70px;
+	margin-left: -35px;
+	font-size: 14px;
+}
+.camara li img{
+	border-radius: 4px;
+}
+.insure-submit{
+	width: 380px;
+	margin: 80px auto;
+}

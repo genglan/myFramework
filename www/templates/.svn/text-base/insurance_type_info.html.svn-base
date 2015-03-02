@@ -1,0 +1,18 @@
+<div class="modal insurance-modal">
+  <ion-header-bar>
+    <h1 class="title">投保险种详情</h1>
+    <div class="buttons">
+    	<button class="button button-clear button-positive" ng-click="closeModal()">关闭</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row"><div class="col"><p>险种代码：</p><p>{{productInfo.PRODUCT_CODE}}</p></div></div>
+    <div class="row"><div class="col"><p>险种名称：</p><p>{{productInfo.PRODUCT_CODE | productCodeToName}}</p></div></div>
+    <div class="row"><div class="col"><p>保额/份数：</p><p>{{productInfo.AMOUNT}}/{{productInfo.MULTI}}</p></div></div>
+    <div class="row"><div class="col"><p>保费：</p><p>{{productInfo.PREM | appendDescri:'元'}}</p></div></div>
+    <div class="row"><div class="col"><p>职业加费：</p><p>{{productInfo.JOB_ADD_FEE | appendDescri:'元'}}</p></div></div>
+    <div class="row"><div class="col"><p>缴费期间：</p><p>{{productInfo.PAY_END_YEAR | appendDescri:'年'}}</p></div></div>
+    <div class="row"><div class="col"><p>缴费方式：</p><p>{{productInfo.PAY_INTV}}</p></div></div>
+    <div class="row"><div class="col"><p>保险期间：</p><p>{{productInfo.INSU_YEARS | appendDescri:'年'}}</p></div></div>
+  </ion-content>
+</div>

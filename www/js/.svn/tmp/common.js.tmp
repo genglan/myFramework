@@ -1,0 +1,69 @@
+/******************应用跳转使用的公共方法************************/
+var storage = window.localStorage;
+function loadAnotherJs(data){
+<<<<<<< .mine
+	
+	var app = {
+=======
+	/*var app = {
+>>>>>>> .r890
+		  'applicantID':'018611018517140828170450031383',
+          'applicantName':'规范',
+          'applicantSex':'0',
+          'applicantBirthday':'1984-6-2',
+          'applicantOccupationCode':'33434'
+	}
+	var recog = {
+		'recognizeeID':'018611018517140905092857672355',
+		'recognizeeName':'规划',
+        'recognizeeSex':'1',
+        'recognizeeBirthday':'1981-5-2',
+        'recognizeeOccupationCode':'456455'
+	}
+	try{
+		document.addEventListener('deviceready', function(){
+<<<<<<< .mine
+			var json = eval("("+data+")");
+			if('recommend' == json.flag){//判断是否是建议书跳转过来了的 是，则需要把各信息缓存在本地
+		    	//storage.setItem("jsonKey",json)//缓存整个json
+		    	document.getElementById("applicantID").value = app.applicantID;
+				document.getElementById("a_name").innerText = app.applicantName;
+				document.getElementById("a_sex").innerText = app.applicantSex == 0?'男':'女';
+				document.getElementById("a_birthday").innerText = app.applicantBirthday;
+				document.getElementById("a_occupation").innerText = app.applicantOccupationCode;
+				document.getElementById("recognizeeID").value = recog.recognizeeID;
+				document.getElementById("i_name").innerText = recog.recognizeeName;
+				document.getElementById("i_sex").innerText = recog.recognizeeSex == 0?'男':'女';
+				document.getElementById("i_birthday").innerText = recog.recognizeeBirthday;
+				document.getElementById("i_occupation").innerText = recog.recognizeeOccupationCode;
+		    }
+=======
+			document.getElementById("applicantID").value = app.applicantID;
+			document.getElementById("a_name").innerText = app.applicantName;
+			document.getElementById("a_sex").innerText = app.applicantSex == 0?'男':'女';
+			document.getElementById("a_birthday").innerText = app.applicantBirthday;
+			document.getElementById("a_occupation").innerText = app.applicantOccupationCode;
+			document.getElementById("recognizeeID").value = recog.recognizeeID;
+			document.getElementById("i_name").innerText = recog.recognizeeName;
+			document.getElementById("i_sex").innerText = recog.recognizeeSex == 0?'男':'女';
+			document.getElementById("i_birthday").innerText = recog.recognizeeBirthday;
+			document.getElementById("i_occupation").innerText = recog.recognizeeOccupationCode;
+			
+	    	if('recommend' == json.flag){//判断是否是建议书跳转过来了的 是，则需要把各信息缓存在本地
+	    		//storage.setItem("jsonKey",json)//缓存整个json
+	    	}else{
+
+	    	}
+
+>>>>>>> .r890
+		}, false);
+	}catch(e){
+		console.log("json解析出错！"+e);
+	}*/
+
+	alert(data);
+	var json = eval('('+data+')');
+	storage.setItem("jsonKey",json);
+	console.log('111111:'+json,json.recommend,json.info,json.info.id);
+}
+

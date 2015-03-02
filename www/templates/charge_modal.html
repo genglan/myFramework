@@ -1,0 +1,20 @@
+<div class="modal insurance-modal">
+  <ion-header-bar>
+    <h1 class="title">收费</h1>
+    <div class="buttons">
+    	<button class="button button-clear button-positive" ng-click="closeChargeModal()">关闭</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row"><div class="col"><p>保单号：</p><p ng-bind="baseInfo.printNo"></p></div></div>
+    <div class="row"><div class="col"><p>保单状态：</p><p>{{state | insuranceState}}</p></div></div>
+    <div class="row"><div class="col"><p>开户银行：</p><p>{{baseInfo.bankCode | bankCodeToName}}</p></div></div>
+    <div class="row"><div class="col"><p>户名：</p><p ng-bind="baseInfo.applicantName"></p></div></div>
+    <div class="row"><div class="col"><p>银行卡号：</p><p ng-bind="baseInfo.bankAccNo"></p></div></div>
+    <div class="row"><div class="col"><p>收费金额：</p><p>{{baseInfo.sumPrem | appendDescri:'元'}}</p></div></div>
+  </ion-content>
+  <div class="bar bar-footer" >
+    <button class="button button-clear" style="left: -20%;" ng-click="chargeFun(baseInfo);">立即收费</button>
+    <button class="button button-clear" style="right: 20%;" ng-click="showOtherWayCharge()">其他银行卡交费</button>
+  </div>
+</div>

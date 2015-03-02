@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/mportal/!svn/ver/801/HTML/InsuranceOnline/www/db
+END
+t_greeting.sqlite
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/mportal/!svn/ver/755/HTML/InsuranceOnline/www/db/t_greeting.sqlite
+END
+insurance_online.sqlite
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/mportal/!svn/ver/743/HTML/InsuranceOnline/www/db/insurance_online.sqlite
+END
+t_code.sqlite
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/mportal/!svn/ver/755/HTML/InsuranceOnline/www/db/t_code.sqlite
+END
+t_bank.sqlite
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/mportal/!svn/ver/801/HTML/InsuranceOnline/www/db/t_bank.sqlite
+END

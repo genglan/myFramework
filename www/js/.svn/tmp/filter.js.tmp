@@ -1,0 +1,83 @@
+angular.module('starter.filters', [])
+/**
+*代码格式化
+* add by genglan
+* 2015-1-24
+*/ 
+.filter('codeFormat', function(Variables,CommonFn){
+	var codeFormatFun = function(code,arg){
+		return CommonFn.loadCodeNameByCode(Variables.codeJson,arg,code)
+	}
+	return codeFormatFun;
+})
+/**
+*获取险种名称
+* add by genglan
+* 2015-1-24
+*/ 
+.filter('productCodeToName',function (Variables,CommonFn){
+	var productFormatFun = function (code){
+        return CommonFn.loadProductNameByCode(Variables.productJson,code);	
+	}
+   	return productFormatFun ;
+})
+/**
+*添加单位
+* add by genglan
+* 2015-1-24
+*/
+.filter('appendDescri',function (){
+	var append = function(data,arg){
+        return data? data+ arg :'';
+	}
+	return append;
+})
+/**
+*保单状态
+* add by genglan 
+* 2015-2-2
+*/
+.filter('insuranceState',function (){
+	var stateFun = function(data){
+		if('-2' == data){
+			return '处理异常';
+		}else if ('-4' == data) {
+			return '客户合并中'
+		}else if ('-1' == data) {
+			return '未提交'
+		}else if ('0' == data) {
+			return '待交费'
+		}else if ('1' == data) {
+			return '待核报审核'
+		}else if ('2' == data) {
+			return '已交费'
+		}else if ('3' == data) {
+			return '承保前撤单'
+		}else if ('4' == data) {
+			return '保单承保'
+		}else if ('5' == data) {
+			return '保单已打印'
+		}else if ('6' == data) {
+			return '已签章'
+		}else if ('7' == data) {
+			return '退保'
+		}else if ('8' == data) {
+			return '退保回退'
+		}else if ('-3' == data) {
+			return '未知状态'
+		}else if ('-5' == data) {
+			return '超过未成年人风险保额'
+		}else if ('11' == data) {
+			return '已签单'
+		}else if ('12' == data) {
+			return '撤单'
+		}else if ('13' == data) {
+			return '拒保'
+		}else if ('14' == data) {
+			return '延期'
+		}else if ('-6' == data) {
+			return '支付失败'
+		}
+	}
+	return stateFun;
+})

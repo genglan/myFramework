@@ -1,0 +1,687 @@
+
+angular.module('starter.controllers', [])
+/**
+*主页面
+* add by genglan
+* 2015-1-24
+*/ 
+.controller('MainCtrl', function($scope,$state,$rootScope) {
+    $scope.isSubmit  = false; // 默认未提交
+    //菜单切换
+    $scope.clickMenu = function (checked){
+        if(checked){
+            $scope.isSubmit  = true;
+            $state.go('menu.submit'); 
+        }else{
+            $scope.isSubmit  = false;
+            $state.go('menu.list'); 
+        }
+    }
+    //退出应用
+    $scope.gohomeFun = function (){
+        closeWebView("",function (){
+            console.log('应用退出成功！');
+        },function (){
+            console.log('应用退出失败！');
+        });
+    }
+})
+/******************************************未提交保单  add by genglan 2015-1-24*********************************************/
+.controller('MenuCtrl', function($scope,$rootScope,$state,$ionicPopup,unFinshedInsurance,CommonFn,Variables) {
+    CommonFn.alertPopupFun($ionicPopup,'loading','加载中！...',0);
+    //查询未提交保单列表
+    $scope.loadunFinshedList = function (searchVal){
+        unFinshedInsurance.loadUnFinshedInsurance({
+            searchVal:searchVal,
+            callBackFun :function (data){
+                $scope.$apply(function (){
+                    if(null != Variables.alertPopup){
+                        Variables.alertPopup.close();
+                    }
+                    $scope.unFinshedList = data;
+                })
+            }
+        });  
+    }
+    document.addEventListener('deviceready', function(){
+        $scope.loadunFinshedList(''); 
+    }, false);
+    $rootScope.selectedRow = '-1';
+    //点击列表
+    $scope.clickMenu = function (item){
+        $rootScope.selectedRow = item.ID;
+    	if(ionic.Platform.isIPad()){
+			$state.go('menu.list.data_view',{'insuranceID':item.ID,'proposalID':item.PROPOSAL_ID,'applicantID':item.APPLICANT_ID,'recognizeeID':item.INSURANT_ID});
+    	}else{
+			$state.go('data_view',{'insuranceID':item.ID,'proposalID':item.PROPOSAL_ID,'applicantID':item.APPLICANT_ID,'recognizeeID':item.INSURANT_ID});
+    	}	
+    } 
+    //未提交保单搜索
+    $scope.autocompleteFn = function (){
+        var autocompleteValue = document.getElementById("autocomplete").value;
+        $scope.loadunFinshedList(autocompleteValue); 
+    } 
+    //添加保单 先跳转到建议书，选择建议书，选择完后跳转到 制作建议书的第一步
+    $scope.addInsurance = function (){
+        var url = "promodel/"+Variables.recommendAppId+"/www/index.html#/menu/list/Y?agentCode="+Variables.currentCode;
+        var jsonKey ={
+            "serviceType":"LOCAL",
+            "URL": url
+        };
+        pushToViewController(jsonKey, function (){
+            console.log("选择建议书！");
+        },function (){
+            console.log("选择建议书")
+        }); 
+    } 
+})
+/**
+*数据展示
+* add by genglan
+* 2015-1-24
+*/
+.controller('DataCtrl', function($scope,$state,$stateParams,$rootScope,$ionicActionSheet,$ionicPopup,$ionicModal,unFinshedInsurance,Variables,CommonFn) {
+    var insuranceID = $stateParams.insuranceID //选择的保单ID
+    var proposalID = $stateParams.proposalID //建议书ID
+    var applicantID = $stateParams.applicantID //投保人
+    var recognizeeID = $stateParams.recognizeeID //建议书ID
+    //点击关闭按钮
+    $scope.closeData = function (){
+        $rootScope.selectedRow = '-1';
+        $state.go('menu.list');
+    }
+    //查询投保人信息
+    unFinshedInsurance.loadCustomer({
+        applyID:insuranceID,
+        applicantID:applicantID,
+        callBackFun:function (data){
+            $scope.applicant = data[0];
+        }
+    });
+    //查询被保人信息
+    unFinshedInsurance.loadCustomer({
+        applyID:insuranceID,
+        recognizeeID:recognizeeID,
+        callBackFun:function (data){
+            $scope.recognizee = data[0];
+        }
+    });
+    //查询当前保单险种信息
+    unFinshedInsurance.loadProductByID({
+        proposalID:proposalID,
+        callBackFun:function (data){
+            $scope.productList = data;   
+        }
+    });   
+    //删除未提交的保单
+	$scope.deleteData = function (){
+        var jsonDataArr = [
+            {
+                "databaseName": Variables.dataBaseName,
+                "tableName": "T_PROPOSAL_PRODUCT",
+                "conditions": [{
+                    "PROPOSAL_ID": proposalID
+                }]
+            },
+            {
+                "databaseName": Variables.dataBaseName,
+                "tableName": "T_PROPOSAL",
+                "conditions": [{
+                    "ID": proposalID
+                }]
+            },
+            {
+                "databaseName": Variables.dataBaseName,
+                "tableName": "T_CUSTOMER",
+                "conditions": [{
+                    "APPLY_ID": insuranceID
+                }]
+            },
+            {
+                "databaseName": Variables.dataBaseName,
+                "tableName": "T_APPLY",
+                "conditions": [{
+                    "ID": insuranceID
+                }]
+            }
+        ]
+        var hideSheet = $ionicActionSheet.show({
+            titleText:'是否删除保单',
+            destructiveText: '确定',
+            cancelText: '取消',
+            cancel: function() {},
+            destructiveButtonClicked: function(){
+               hideSheet();
+               unFinshedInsurance.deleteInsurance({
+                    jsonDataArr:jsonDataArr,
+                    callBackFun:function (data){
+                        if(1 == data){
+                            CommonFn.deleteArray({
+                                array:$scope.unFinshedList,
+                                deleteID:insuranceID,
+                                callBackFun:function (data){
+                                    CommonFn.alertPopupFun($ionicPopup,'charging','删除成功！...',3000);
+                                    $state.go('menu.list');   
+                                }
+                            }) 
+                        }else{
+                           CommonFn.alertPopupFun($ionicPopup,'loser','删除失败！...',3000); 
+                        }
+                    }
+               })
+            }
+        });
+    } 
+    $ionicModal.fromTemplateUrl('templates/insurance_type_info.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    //查看险种详细信息
+    $scope.showInsuranceInfo = function (i){
+        $scope.productInfo = $scope.productList[i];
+        $scope.modal.show(); 
+    }
+    $scope.closeModal = function (){
+        $scope.modal.hide();
+    }
+    //编辑未提交的保单、提交保单
+    $scope.editData = function (){
+        $state.go('insure_needknow',{'insuranceID':insuranceID});
+    } 
+})
+/******************************************已提交保单 add by genglan 2015-1-24*********************************************/
+.controller('InsuranceCtrl', function($scope,$rootScope,$state,$stateParams,$ionicPopup,Variables,CommonFn,submitInsurance) {
+    CommonFn.alertPopupFun($ionicPopup,'loading','加载中！...',0);
+    $scope.tabs = brows().iphone ? 64:44;
+    $scope.currentTab = 'templates/insurance_list.html';
+    $scope.isAlready = false;
+    //查询保单列表
+    $scope.loadInsuranceList = function (state,searchVal){
+        submitInsurance.loadFinishedInsurance({
+            state:state,
+            searchVal:searchVal,
+            callBackFun:function (data){ 
+                $scope.$apply(function (){
+                    if(null != Variables.alertPopup){
+                        Variables.alertPopup.close();
+                    }
+                   $scope.insuranceList = data;
+                })
+            }
+        });
+    }
+    $scope.loadInsuranceList(0,'');//查询列表 默认查询未承保的
+    //tab切换
+    $scope.onClickTab = function (state){
+        document.getElementById('autocomplete').value = '';
+        $rootScope.selectedRow = '-1';
+        $scope.isAlready = state == '1'?true:false ;
+        CommonFn.alertPopupFun($ionicPopup,'loading','加载中！...',0);
+        $scope.loadInsuranceList(state,'');
+    }
+    //搜索
+    $scope.autocompleteFn = function (){
+        CommonFn.alertPopupFun($ionicPopup,'loading','加载中！...',0);
+        var autocompleteValue = document.getElementById("autocomplete").value;
+        $scope.loadInsuranceList($scope.isAlready,autocompleteValue);
+    }
+    $rootScope.selectedRow = '-1';
+    $scope.clickInsurance = function (index){
+        $rootScope.selectedRow = index;
+        if(ionic.Platform.isIPad()){
+            $state.go('menu.submit.insurance_view',{'indexNo':index});
+        }else{//手机版的此后页面全部横屏
+            setScreenLandscape('',function (){
+                console.log("横屏成功！");
+            },function (){
+                console.log("横屏失败！")
+            })
+            $state.go('insurance_view',{'indexNo':index});
+        } 
+    }
+})
+/**
+*已提交保单数据展示
+* add by genglan
+* 2015-1-24
+*/
+.controller('InsuranceDataCtrl', function($scope,$rootScope,$state,$stateParams,$ionicModal,$ionicPopup,Variables,CommonFn,submitInsurance) {
+    CommonFn.alertPopupFun($ionicPopup,'loading','加载中！...',0);
+    var indexNo = $stateParams.indexNo;
+    $scope.baseInfo = $scope.insuranceList[indexNo];//保单基本信息
+    var printNo = $scope.baseInfo.printNo; 
+    submitInsurance.loadInsuranceByID({
+        printNo:printNo,
+        callBackFun:function (data){
+            $scope.$apply(function (){
+                $scope.applicant = data.applicant;//投保人
+                $scope.insurant = data.insuredList[0].insurant;//被保人
+                $scope.beneficiaryList = data.insuredList[0].beneficiaryList;//受益人
+                $scope.insuranceList = data.insuredList[0].insuranceList//投保事项
+                if(null != Variables.alertPopup){
+                    Variables.alertPopup.close();
+                }
+            });
+        }
+    });
+    //点击关闭按钮
+    $scope.closeData = function (){
+        $rootScope.selectedRow = '-1';
+        if(!ionic.Platform.isIPad()){//手机版关闭后恢复竖屏
+            setScreenPortrait('',function (){
+                console.log("竖屏成功！");
+            },function (){
+                console.log("竖屏失败！")
+            })
+        }
+        $state.go('menu.submit');
+    } 
+    //收费
+    $ionicModal.fromTemplateUrl('templates/charge_modal.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.chargeModal = modal;
+    });
+    //其他缴费方式
+    $ionicModal.fromTemplateUrl('templates/other_way_charge.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.otherModal = modal;
+    });
+    //关闭收费
+    $scope.closeChargeModal = function (){
+        $scope.chargeModal.hide();
+    }
+    //关闭其他收费
+    $scope.closeOtherModal = function (){
+       $scope.otherModal.hide(); 
+    }
+    //弹出收费的modal
+    $scope.showCharge =function (){
+        //查询当前保单状态
+        submitInsurance.loadInsuranceState({
+            printNo:printNo,
+            callBackFun:function (data){
+                $scope.state = data.state;
+                $scope.chargeModal.show(); 
+            } 
+        });     
+    }
+    //续期缴费时，是否使用本银行卡？
+    $scope.activted = true; 
+    $scope.checkedRadio = function (){
+        if($scope.activted){
+           $scope.activted = false; 
+        }else{
+            $scope.activted = true;
+        }   
+    }
+    //收费
+    $scope.chargeFun = function (item){
+        submitInsurance.chargeFun({
+            printNo:item.printNo,
+            bankCode:item.bankCode,
+            bankAccNo:item.bankAccNo,
+            callBackFun:function (data){
+                if(0 == data.code){
+                    CommonFn.alertPopupFun($ionicPopup,'charging','收费成功！',3000); 
+                }else{
+                    CommonFn.alertPopupFun($ionicPopup,'loser',data.msg,3000);  
+                }
+            }
+        });         
+    }
+    //弹出其他方式收费页面
+    $scope.showOtherWayCharge = function (){
+        $scope.bankList = Variables.bankJson;
+        $scope.chargeModal.hide();
+        $scope.otherModal.show();  
+    }
+    //其他收费方式
+    $scope.otherWayCharge = function (){
+        var array = {};
+        array["printNo"] = printNo;
+        array["bankCode"] = $scope.bankCode;
+        array["bankAccNo"] = $scope.bankAccNo;
+        if($scope.activted){//保存当前收费方式到数据库
+            submitInsurance.saveOtherChargeWay({
+                printNo:printNo,
+                bankCode:$scope.bankCode,
+                bankAccNo:$scope.bankAccNo,
+                callBackFun:function (data){
+                    if(0 == data.code){//其他方式保存成功后调收费接口
+                        $scope.chargeFun(array);
+                    }else{
+                        CommonFn.alertPopupFun($ionicPopup,'loser','其他银行卡交费失败！',3000); 
+                    }
+                } 
+            });
+        }else{//直接走收费的接口
+            $scope.chargeFun(array);
+        }
+    }   
+})
+/**********在线投保 by kezhi**********/
+.controller('NeedKnowCtrl', function($scope,$state,$stateParams,$compile,$ionicPopup,$rootScope,$ionicSlideBoxDelegate,$ionicActionSheet,$ionicLoading,$timeout,CommonFn,unFinshedInsurance,Variables) {
+    var insuranceID = $stateParams.insuranceID;
+    var step1 = $scope.step1 = {};
+    var step2 = $scope.step2 = {};
+    var step3 = $scope.step3 = {};
+    
+    //投保须知
+    $scope.clickTab1 = function (i){
+        if(i == 4){
+            $scope.slideIndex  = 1; 
+        }else{
+            $scope.step1 = {activeTab : i} ;  
+        }    
+    }
+    //数据录入
+    $scope.clickTab2 = function (i){
+        $scope.step2 = { activeTab : i};
+        if(i == 5){
+            var applicant_know = asyncOnlineRuleByXml('xml/appnt_impart_template.xml','111602','21','1');
+            var txt = $compile(applicant_know)($scope);
+            var el = document.getElementById('applicant_know');
+            angular.element(el).html('').append(txt); 
+        }else if(i == 6){
+            var recognizee_know = asyncOnlineRuleByXml('xml/insurant_impart_template.xml','111602','21','1');
+            var txt = $compile(recognizee_know)($scope);
+            var el = document.getElementById('recognizee_know');
+            angular.element(el).html('').append(txt);
+        }else if(i == 7){
+            var agent_know = asyncOnlineRuleByXml('xml/agent_impart_template.xml','111602','21','1');
+            var txt = $compile(agent_know)($scope);
+            var el = document.getElementById('agent_know');
+            angular.element(el).html('').append(txt);
+        }else if(i == 8){
+            var customer_know = asyncOnlineRuleByXml('xml/client_impart_template.xml','111602','21','1');
+            var txt = $compile(customer_know)($scope);
+            var el = document.getElementById('customer_know');
+            angular.element(el).html('').append(txt);
+        }else if(i == 9){
+            $scope.slideIndex  = 2;
+            $ionicSlideBoxDelegate.next();
+        }
+    }
+    //提交保单
+    $scope.commitInsurance = function (){
+        var printNo1 = document.getElementById("printNo1").value;
+        var printNo2 = document.getElementById("printNo2").value;
+        // var printNo1 = $scope.printNo1;
+        // var printNo2 = $scope.printNo2;
+        if(printNo1 != printNo2){
+            CommonFn.alertPopupFun($ionicPopup,'loser','两次输入不一致！',3000);
+        }else{
+           unFinshedInsurance.commitInsurance({
+                printNo:printNo1,
+                callBackFun:function (data){
+                    if(1 == data.code || 2 == data.code || 3 == data.code || -1 == data.code){
+                       CommonFn.alertPopupFun($ionicPopup,'loser',data.msg,3000);  
+                    }else{//保单提交成功后跳转到已提交保单的未承保页面
+                        CommonFn.alertPopupFun($ionicPopup,'loading','保单提交成功！',3000);
+                        $scope.isSubmit  = true;
+                        $state.go('menu.submit');     
+                    }
+                } 
+           }); 
+        }
+    }
+    $scope.slideChanged = function (index) {
+        //$scope.step2 = { activeTab : 1};
+        $scope.slideIndex = index;
+    };
+    $scope.disableSwipe = function() {
+        $ionicSlideBoxDelegate.enableSlide(true);
+    };
+    $scope.NextStep = function () {
+        $ionicSlideBoxDelegate.next();
+    };
+    $scope.PrevStep = function () {
+        $ionicSlideBoxDelegate.previous();
+    }; 
+    //取消
+    $scope.insure_cancel = function(){
+        $rootScope.selectedRow = '-1';
+        $state.go('menu.list');
+    };
+
+
+/**********************************投保须知&影像录入***************************************/
+        angular.element(document).ready(function () {
+            //pdf高度
+            var pdfH = document.getElementById('pdf-con').offsetHeight;
+            document.getElementById('frame').height = pdfH - 82;
+
+
+            var applicantID = document.getElementById('applicantID').value;
+            var recognizeeID = document.getElementById('recognizeeID').value;
+            console.log(document.getElementById('applicantID').value)
+
+            $scope.toCustomer = function (){
+
+                console.log(Variables.customerAppId,Variables.currentCode,applicantID,recognizeeID);
+                //var url = "promodel/"+Variables.customerAppId+"/www/index.html?pctype="+platform+"&proid="+Variables.customerAppId+"&recommend=1&applicant_id="+applicantID+"&agentCode=8611000456&editCustom=true&mustNeedKey=REAL_NAME,SEX,BIRTHDAY,RELATION,IDNAME,IDNO,ID_END_DATE,NATIVE_PLACE,RGT_ADDRESS,MARRIY,INCOME,INCOME_WAY,MOBILE,EMAIL,MAILING_ADDRESS,MAILING_ZIP_CODE&customId="+applicantID;
+                var url = "promodel/"+Variables.customerAppId+"/www/index.html?pctype=pad&proid="+Variables.customerAppId+"&applicant_id="+applicantID+"&agentCode="+Variables.currentCode+"&editCustom=true&mustNeedKey=REAL_NAME,SEX,BIRTHDAY";
+
+                 var jsonKey ={
+                 "serviceType":"LOCAL",
+                 "URL": url
+                 };
+                 pushToViewController(jsonKey, function (){
+                 console.log("选择客户！");
+                 },function (){
+                 console.log("选择失败")
+                 });
+            }
+        });
+        //投保须知
+        $scope.agree1 = function(check1){
+            console.log(check1.on)
+            if(check1.on == true){
+                $timeout(function(){
+                    $scope.step1 = {
+                        activeTab:2
+                    }
+                },800)
+            }else{
+                alert(2)
+            }
+        };
+        //保险条款
+        $scope.agree2 = function(check2){
+            console.log(check2.on)
+            if(check2.on == true){
+                $timeout(function(){
+                    $scope.step1 = {
+                        activeTab:3
+                    }
+                },800)
+            }
+        };
+        //产品说明
+        $scope.agree3 = function(check3){
+            console.log(check3.on)
+            if(check3.on == true){
+                $scope.step1 = {
+                    activeTab:1
+                }
+                console.log('finish')
+            }
+        }
+
+        /**
+         * 影像录入
+         */
+        $scope.goAction = function ($event,tb) {
+            $ionicActionSheet.show({
+                buttons: [
+                    {
+                        text: '拍照'
+                    },
+                    {
+                        text: '从相册中选取'
+                    }
+                ],
+                cancelText: '取消',
+                cancel: function () {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function (index) {
+                    if (index == 0) {
+                        getPhotoFromCamera(function (imageURL) {
+                            if(tb=='front-tbr'){
+                                //投保人正面
+                                $scope.$apply(function(){
+                                    $scope.tbrFront = imageURL;
+                                })
+
+                            }else if(tb=='back-tbr'){
+                                //投保人反面
+                                $scope.$apply(function(){
+                                    $scope.tbrBack = imageURL;
+                                })
+                            }else if(tb=='front-bbr'){
+                                //被保人正面
+                                $scope.bbrFront = imageURL;
+                            }else if(tb=='back-bbr'){
+                                //被保人反面
+                                $scope.bbrBack = imageURL;
+                            }else if(tb=='front-syr'){
+                                //受益人正面
+                                $scope.syrFront = imageURL;
+                            }else if(tb=='back-syr'){
+                                //受益人反面
+                                $scope.syrBack = imageURL;
+                            }
+                        }, function () {
+//							alert('调用相机失败')
+                            $ionicLoading.show({
+                                template: '调用相机失败!'
+                            });
+                            $timeout(function () {
+                                $ionicLoading.hide();
+                            }, 1000);
+                        });
+                    } else if (index == 1) {
+                        getPhotoFromAlbum(1, function (imageURL) {
+                            if(tb=='front-tbr'){
+                                //投保人正面
+                                $scope.tbrFront = imageURL;
+                            }else if(tb=='back-tbr'){
+                                //投保人反面
+                                $scope.tbrBack = imageURL;
+                            }else if(tb=='front-bbr'){
+                                //被保人正面
+                                $scope.bbrFront = imageURL;
+                            }else if(tb=='back-bbr'){
+                                //被保人反面
+                                $scope.bbrBack = imageURL;
+                            }else if(tb=='front-syr'){
+                                //受益人正面
+                                $scope.syrFront = imageURL;
+                            }else if(tb=='back-syr'){
+                                //受益人反面
+                                $scope.syrBack = imageURL;
+                            }
+                        }, function () {
+//							alert('调用相册失败')
+                            $ionicLoading.show({
+                                template: '调用相册失败!'
+                            });
+                            $timeout(function () {
+                                $ionicLoading.hide();
+                            }, 1000);
+                        })
+                    }
+                    return true;
+                }
+            });
+        };
+        /*$scope.tbrFront = '../img/add_red.png';
+         $scope.tbrBack = '../img/add_red.png';*/
+        $scope.saveTbr = function(i){
+            if($scope.tbrFront!=''&&$scope.tbrBack!=''){
+                /*                alert($scope.tbrFront);
+                 alert($scope.tbrBack);*/
+                //投保人正面
+                var insuranceID = $stateParams.insuranceID;
+                var byid = {
+                    "databaseName": Variables.dataBaseName,
+                    "tableName": "T_APPLY",
+                    "conditions": {"ID": insuranceID}
+                };
+                queryTableDataByConditions(byid, function (data) {
+                    console.log(data[0]);
+                    var applicantID = data[0].APPLICANT_ID;
+                    //var insurantID = data[0].INSURANT_ID;
+                    var inserttbr = {
+                        "databaseName": Variables.dataBaseName,
+                        "tableName": "T_CUSTOMER",
+                        "conditions": [
+                            {"APPLY_ID": insuranceID,"CUSTOMER_ID":applicantID}
+                        ],
+                        "data": [
+                            {
+                                "CARD_FRONT": $scope.tbrFront,
+                                "CARD_ REVERSE": $scope.tbrBack
+                            }
+                        ]
+                    };
+                    updateORInsertTableDataByConditions(inserttbr, function (data) {
+                        if (data == 1) {
+                            console.log('投保人证件正面插入数据成功！');
+                            element.attr('src',imageURL);
+                        }else{
+                            $ionicLoading.show({
+                                template: '证件上传失败!'
+                            });
+                            $timeout(function () {
+                                $ionicLoading.hide();
+                            }, 1000);
+                        }
+                    });
+
+                });
+
+                $ionicLoading.show({
+                    template: '投保人证件上传成功!'
+                });
+                $timeout(function () {
+                    $ionicLoading.hide();
+                    $scope.step3 = {activeTab : i};
+                }, 1000);
+
+            }else{
+                $ionicLoading.show({
+                    template: '证件正反面都要上传!'
+                });
+                $timeout(function () {
+                    $ionicLoading.hide();
+                }, 1000);
+            }
+
+            /*//根据投保ID查询投保人，被保人，受益人
+             var insuranceID = $stateParams.insuranceID;
+             var byid = {
+             "databaseName": Variables.dataBaseName,
+             "tableName": "T_APPLY",
+             "conditions": {"ID": insuranceID}
+             };
+             queryTableDataByConditions(byid, function (data) {
+             console.log(data[0]);
+             var applicantID = data[0].APPLICANT_ID;
+             var insurantID = data[0].INSURANT_ID;
+             */
+
+        };
+        $scope.saveBbr = function(i){
+            $scope.step3 = {activeTab : i};
+        };
+        $scope.saveSyr = function(){
+
+        };
+
+
+})

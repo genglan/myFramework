@@ -1,0 +1,26 @@
+<div class="modal insurance-modal">
+  <ion-header-bar>
+    <h1 class="title">收费</h1>
+    <div class="buttons">
+    	<button class="button button-clear button-positive" ng-click="closeOtherModal()">关闭</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+      <div class="charge-modal other-modal"> 
+        <div>
+            <select ng-model="bankCode" ng-options="p.BANK_CODE as p.BANK_NAME for p in bankList">
+              <option value="">--请选择开户银行--</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" ng-model="bankAccNo" placeholder="请输入银行卡号">
+        </div>
+        <div>
+          <i ng-class="{'activted':activted}" ng-click="checkedRadio();">续期缴费时，是否使用本银行卡？</i>
+        </div> 
+      </div>
+  </ion-content>
+  <div class="bar bar-footer">
+    <button class="button button-clear" ng-click="otherWayCharge();">立即收费</button>
+  </div>
+</div>

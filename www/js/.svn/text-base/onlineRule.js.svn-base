@@ -1,0 +1,356 @@
+/**
+ * @功能:在线投保规则验证
+ * @param {xmlUrl:文件url路径, currentIsuresID:当前的险种ID,appantAge:投保人年龄,appantSex:投保人性别 如果是被保人的话传入被保人的值}
+ * @Author:Li Jie
+ * @Date 2015-02-10
+*/ 
+function asyncOnlineRuleByXml(xmlUrl,currentIsuresID,appantAge,appantSex){
+		var domDoc = getNativeXml(xmlUrl);
+		if(domDoc){
+			 var result_html='';
+			 
+			 var DisclosureItemList = domDoc.getElementsByTagName("DisclosureItem");//
+			 if(DisclosureItemList != null && DisclosureItemList.length > 0){
+			 	for(var i = 0; i<DisclosureItemList.length; i++){
+			 		var disclosureItemEl = DisclosureItemList[i];
+			 		
+			 		var disclosure_ver = disclosureItemEl.getAttribute("disclosure_ver");
+			 		var no_yesno = disclosureItemEl.getAttribute("no_yesno");
+			 		var disclosure_id = disclosureItemEl.getAttribute("disclosure_id");
+			 		
+			 		var if_express = disclosureItemEl.getAttribute("if"); //条件语句
+			 		if(if_express){
+			 			if_express = if_express.replaceAll("&amp;","&");
+			 			if_express = if_express.replaceAll("currentIsuresID",currentIsuresID);
+			 			if_express = if_express.replaceAll("appantAge",appantAge);
+			 			if_express = if_express.replaceAll("appantSex",appantSex);
+			 		}
+			 		var flag = disclosureItemEl.getAttribute("flag");  //类型标识 
+			 		var childList = disclosureItemEl.childNodes; //获取所有的子节点
+			 		var item_html='<div>'; 
+			 		if('common' == flag){ //单纯的htmlForm表单
+			 			if(childList != null && childList.length > 0){
+				 			for(var j = 0; j<childList.length; j++){
+				 				var nodeType = childList[j].nodeType;
+				 				if(1 == nodeType){
+				 					var descriptionText = childList[j].getAttribute("text");
+				 					if(descriptionText){ //lable文字
+				 						 item_html += descriptionText;
+				 					}else{
+				 						var input_key = childList[j].getAttribute("input_key");
+				 						if(input_key){ //input框
+				 								item_html += "<input id="+disclosure_id+"_"+input_key+" />";
+				 						} 
+				 					}
+				 				}
+				 			}
+				 			item_html+="</div>";
+				 			result_html+=item_html;
+				 		}
+			 		}else if('ifcommon' == flag){ //带有条件判断的form表单操作 
+			 		  //可以伸缩的框,根据条件进行判断 
+						if(eval(if_express)){
+							if(childList != null && childList.length > 0){
+					 			for(var j = 0; j<childList.length; j++){
+					 				var nodeType = childList[j].nodeType;
+					 				if(1 == nodeType){
+					 						var descriptionText = childList[j].getAttribute("text");
+					 						if(descriptionText){
+					 							item_html+=descriptionText;
+					 							item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+					 						} 
+					 						var expandChild = childList[j].childNodes;
+				 							if(expandChild != null && expandChild.length > 0 ){
+				 								for(var k = 0; k<expandChild.length; k++){
+				 									if(1 ==  expandChild[k].nodeType){
+				 										var exText = expandChild[k].getAttribute("text");
+				 										if(exText){
+				 											 item_html += exText;
+				 										}else{
+				 											var ex_input_key = expandChild[k].getAttribute("input_key");
+				 											if(ex_input_key){
+				 												item_html += "<input id="+disclosure_id+"_"+ex_input_key+" />";
+				 											}
+				 										}
+				 									}
+				 								}
+				 							}
+					 				}
+					 			} 
+					 			item_html+="</div>";
+					 			result_html+=item_html;
+					 		} 
+						}  			
+			 		}else if('HealthRemarkTable' == flag){ //固定标记情况
+			 			var expendable = disclosureItemEl.getElementsByTagName("Expendable");
+			 			var description = disclosureItemEl.getElementsByTagName("Description");
+			 			item_html+=description[0].getAttribute("text");
+			 			item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+			 			if(expendable != null && expendable.length > 0){
+			 				 var ex_child = expendable[0].childNodes; 
+			 				 if(ex_child != null && ex_child.length > 0){
+			 				 	  for(var k = 0; k<ex_child.length; k++){
+			 				 	  		if(ex_child[k].nodeType == 1){
+			 				 	  			var healthtable_key = ex_child[k].getAttribute("healthtable_key");
+			 				 	  			var text = ex_child[k].getAttribute("text");
+			 				 	  			if(text){
+			 				 	  				 item_html+=text;
+			 				 	  			}else{
+			 				 	  				var static_hl ="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_0_"+healthtable_key+">请您告知治疗或住院的具体时间:<input type='text' id=0_"+healthtable_key+" /></span>";
+											    static_hl+="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_1_"+healthtable_key+">请您告知医生诊断的疾病名称:<input type='text' id=_1_"+healthtable_key+" /></span>";
+											    static_hl+="<span style='display:block;text-indent:2em;'  id="+disclosure_id+"_2_"+healthtable_key+">如果住院请您告知医院的名称:<input type='text' id=2_"+healthtable_key+" /></span>";
+											    static_hl+="<span style='display:block;text-indent:2em;'  id="+disclosure_id+"_3_"+healthtable_key+">请您详细告知:<input type='text' id=3_"+healthtable_key+" /></span>";
+												item_html+=static_hl; 
+												item_html+="</div>";
+						 						result_html+=item_html;
+			 				 	  			} 
+			 				 	  		}
+			 				 	  }
+			 				 }
+			 			} 
+			 		}else if('BlankRemarkTable' == flag){
+			 		 	var expendable = disclosureItemEl.getElementsByTagName("Expendable");
+			 			var description = disclosureItemEl.getElementsByTagName("Description");
+			 			item_html+=description[0].getAttribute("text");
+						item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+			 			if(expendable != null && expendable.length > 0){
+			 				 var ex_child = expendable[0].childNodes; 
+			 				 if(ex_child != null && ex_child.length > 0){
+			 				 	  for(var k = 0; k<ex_child.length; k++){
+			 				 	  		if(ex_child[k].nodeType == 1){
+			 				 	  			var input_key = ex_child[k].getAttribute("input_key");
+			 				 	  			var text = ex_child[k].getAttribute("text");
+			 				 	  			if(text){
+			 				 	  				 item_html+=text;
+			 				 	  			}else{
+			 				 	  				var static_hl ="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_0_"+input_key+">请您详细告知:<input type='text' id="+input_key+" /></span>";
+											    item_html+=static_hl;
+												item_html+="</div>";
+						 						result_html+=item_html;
+			 				 	  			} 
+			 				 	  		}
+			 				 	  }
+			 				 }
+			 			} 
+			 		}else if('HealthRemarkTableIf' == flag){
+			 			if(eval(if_express)){
+			 				var expendable = disclosureItemEl.getElementsByTagName("Expendable");
+				 			var description = disclosureItemEl.getElementsByTagName("Description");
+				 			item_html+=description[0].getAttribute("text");
+				 			item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+				 			if(expendable != null && expendable.length > 0){
+				 				 var ex_child = expendable[0].childNodes; 
+				 				 if(ex_child != null && ex_child.length > 0){
+				 				 	  for(var k = 0; k<ex_child.length; k++){
+				 				 	  		if(ex_child[k].nodeType == 1){
+				 				 	  			var text = ex_child[k].getAttribute("text");
+				 				 	  			if(text){
+				 				 	  				 item_html+=text;
+				 				 	  			}else{
+				 				 	  				var healthtable_key = ex_child[k].getAttribute("healthtable_key");
+					 				 	  			var static_hl ="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_0_"+healthtable_key+">请您告知治疗或住院的具体时间:<input type='text' id=0_"+healthtable_key+" /></span>";
+												    static_hl+="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_1_"+healthtable_key+">请您告知医生诊断的疾病名称:<input type='text' id=1_"+healthtable_key+" /></span>";
+												    static_hl+="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_2_"+healthtable_key+">如果住院请您告知医院的名称:<input type='text' id=2_"+healthtable_key+" /></span>";
+												    static_hl+="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_3_"+healthtable_key+">请您详细告知:<input type='text' id=3_"+healthtable_key+" /></span>";
+													item_html+=static_hl;
+													item_html+="</div>";
+							 						result_html+=item_html;
+				 				 	  			} 
+				 				 	  		}
+				 				 	  }
+				 				 }
+				 			}
+			 			} 
+			 		}else if('BlankRemarkTableIf' == flag){
+			 			if(eval(if_express)){
+			 				var expendable = disclosureItemEl.getElementsByTagName("Expendable");
+				 			var description = disclosureItemEl.getElementsByTagName("Description");
+				 			item_html+=description[0].getAttribute("text");
+							item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+				 			if(expendable != null && expendable.length > 0){
+				 				 var ex_child = expendable[0].childNodes; 
+				 				 if(ex_child != null && ex_child.length > 0){
+				 				 	  for(var k = 0; k<ex_child.length; k++){
+				 				 	  		if(ex_child[k].nodeType == 1){
+				 				 	  			var input_key = ex_child[k].getAttribute("input_key");
+				 				 	  			var text = ex_child[k].getAttribute("text");
+				 				 	  			if(text){
+				 				 	  				 item_html+=text;
+				 				 	  			}else{
+				 				 	  				var static_hl ="<span style='display:block;text-indent:2em;' id="+disclosure_id+"_0_"+input_key+">请您详细告知:<input type='text' id=0_"+input_key+" /></span>";
+												    item_html+=static_hl;
+													item_html+="</div>";
+							 						result_html+=item_html;
+				 				 	  			} 
+				 				 	  		}
+				 				 	  }
+				 				 }
+				 			} 
+			 			} 
+			 		}else if('if' == flag){
+			 		 	if(eval(if_express)){
+			 		 		if(childList != null && childList.length > 0){
+					 			for(var j = 0; j<childList.length; j++){
+					 				var nodeType = childList[j].nodeType;
+					 				if(1 == nodeType){
+					 					var descriptionText = childList[j].getAttribute("text");
+					 					if(descriptionText){ //lable文字
+					 						 item_html += descriptionText;
+					 					}else{
+					 						var input_key = childList[j].getAttribute("input_key");
+					 						if(input_key){ //input框
+					 								item_html += "<input id="+disclosure_id+"_"+input_key+" />";
+					 						} 
+					 					}
+					 				}
+					 			}
+					 			item_html+="</div>";
+					 			result_html+=item_html;
+					 		}
+			 		 	}
+			 		}else if('radio' == flag){
+			 			if(eval(if_express)){
+			 		 		if(childList != null && childList.length > 0){
+					 			for(var j = 0; j<childList.length; j++){
+					 				var nodeType = childList[j].nodeType;
+					 				if(1 == nodeType){
+					 					var descriptionText = childList[j].getAttribute("text");
+					 					if(descriptionText){ //lable文字
+					 						 item_html += descriptionText;
+					 						 item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+					 					}else{
+					 						var expandChild = childList[j].childNodes;
+				 							if(expandChild != null && expandChild.length > 0 ){
+				 								for(var k = 0; k<expandChild.length; k++){
+				 									if(1 ==  expandChild[k].nodeType){
+				 										var exText = expandChild[k].getAttribute("text");
+				 										if(exText){
+				 											 item_html += exText;
+				 										}else{
+				 											var radio_key = expandChild[k].getAttribute("radio_key");
+				 											var options = expandChild[k].getAttribute("options");
+				 											var ex_input_key = expandChild[k].getAttribute("radio_key");
+				 											if(ex_input_key){
+				 												item_html += '<input type="radio" name='+radio_key+' id='+disclosure_id+' value="'+options+'" />'+options+' ';
+				 											}
+				 										}
+				 									}
+				 								}
+				 							}
+					 					}
+					 				}
+					 			} 
+					 			item_html+="</div>";
+					 			result_html+=item_html;
+					 		}
+			 		 	}
+			 		}else if('radio_noEx' == flag){
+			 			if(childList != null && childList.length > 0){
+					 			for(var j = 0; j<childList.length; j++){
+					 				var nodeType = childList[j].nodeType;
+					 				if(1 == nodeType){
+					 					var descriptionText = childList[j].getAttribute("text");
+					 					if(descriptionText){ //lable文字
+					 						 item_html += descriptionText;
+					 						 item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+					 					}else{
+					 						var expandChild = childList[j].childNodes;
+				 							if(expandChild != null && expandChild.length > 0 ){
+				 								for(var k = 0; k<expandChild.length; k++){
+				 									if(1 ==  expandChild[k].nodeType){
+				 										var exText = expandChild[k].getAttribute("text");
+				 										if(exText){
+				 											 item_html += exText;
+				 										}else{
+				 											var radio_key = expandChild[k].getAttribute("radio_key");
+				 											var options = expandChild[k].getAttribute("options");
+				 											var ex_input_key = expandChild[k].getAttribute("radio_key");
+				 											if(ex_input_key){
+				 												item_html += '<input type="radio" name='+radio_key+' id='+disclosure_id+' value="'+options+'" />'+options+' ';
+				 											}
+				 										}
+				 									}
+				 								}
+				 							}
+					 					}
+					 				}
+					 			} 
+					 			item_html+="</div>";
+					 			result_html+=item_html;
+					 		}
+			 		}else{
+			 			if(childList != null && childList.length > 0){
+				 			for(var j = 0; j<childList.length; j++){
+				 				var nodeType = childList[j].nodeType;
+				 				if(1 == nodeType){
+				 					var descriptionText = childList[j].getAttribute("text");
+				 					if(descriptionText){ //lable文字
+				 						 item_html += descriptionText;
+				 					} 
+				 				}
+				 			}
+				 			item_html+='<input type="checkbox" id="checkbox1" value="0" onclick="pageControlleShow("'+disclosure_id+'","0")">是 <input type="checkbox" id="checkbox1" value="1" onclick="pageControlleShow("'+disclosure_id+'","1")" checked>否<br/>';
+				 			item_html+="</div>";
+				 			result_html+=item_html;
+				 		}
+			 		}
+			 		 
+			 	}
+			 	console.log("result_html:" +result_html);
+			 	return result_html;
+			 }
+		}else{
+			alert("系统找不到该xml文件，请确认路径是否正确!当前路径:" + xmlUrl);
+		}
+}
+
+
+/**
+ * @功能:自定义string替换方法
+ * @Author:Li Jie
+ * @Date 2015-02-10
+ */
+String.prototype.replaceAll = function (AFindText,ARepText){
+	raRegExp = new RegExp(AFindText,"g");
+	return this.replace(raRegExp,ARepText);
+}
+
+/**
+ * @功能:控制页面事件
+ * @Author:Li Jie
+ * @Date 2015-02-10
+ */
+function pageControlleShow(disclosure_id,oper){
+	if(oper == 0){//显示自选项
+		$('[id^='+disclosure_id+']').show();
+	}else{ //隐藏自选项
+		$('[id^='+disclosure_id+']').hide();
+	}
+}
+
+
+/**
+ * @功能:返回xml DOM对象
+ * @param {xmlUrl:文件url路径}
+ * @Author:Li Jie
+ * @Date 2015-02-10
+*/
+function getNativeXml(xmlUrl){ 
+   var xmlDoc;  
+   if (window.ActiveXObject) {
+        xmlDoc = new ActiveXObject('Microsoft.XMLDOM');//IE浏览器
+        xmlDoc.async = false;
+        xmlDoc.load(xmlUrl);
+    }
+    else if (isFirefox=navigator.userAgent.indexOf("Firefox")>0) { //火狐浏览器 
+        xmlDoc = document.implementation.createDocument('', '', null);
+        xmlDoc.load(xmlUrl);
+    }
+    else{ //谷歌浏览器
+           var xmlhttp = new window.XMLHttpRequest();  
+            xmlhttp.open("GET",xmlUrl,false);  
+            xmlhttp.send(null);  
+            xmlDoc = xmlhttp.responseXML;  
+        }  
+	return xmlDoc;
+}

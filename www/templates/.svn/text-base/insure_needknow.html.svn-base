@@ -1,0 +1,763 @@
+<ion-view title="投保需知" class="bg-grey">
+	<header class="bar bar-header" >
+		<button class="button button-icon" ng-click="insure_cancel();">取消</button>
+		<div class="h1 title" id="title">在线投保</div>
+	</header>
+	<div class="steps">
+		<div class="refund-step refund-step-5">
+			<ol class="refund-step-bar">
+				<li class="refund-step-start-cur" ng-class="{'refund-step-start-done':slideIndex > 0}">
+					<div class="first-left-bar">
+						<span class="first-left-bar01"></span>
+						<span class="first-left-bar02"></span>
+						<span class="first-left-bar03"></span>
+					</div>
+					<dl>
+						<dt>
+							<strong>
+								<span class="refund-step-no">1</span>
+								<em class="refund-step-name">投保须知</em>
+							</strong>
+						</dt>
+						<dd class="refund-step-status"></dd>
+					</dl>
+				</li>
+				<li class="refund-step-bar" ng-class="{'refund-step-cur':slideIndex == 1,'refund-step-done':slideIndex > 1}">
+					<dl>
+						<dt>
+							<strong>
+								<span class="refund-step-no">2</span>
+								<em class="refund-step-name">数据录入</em>
+							</strong>
+						</dt>
+						<dd class="refund-step-status"></dd>
+					</dl>
+				</li>
+				<li class="refund-step-bar" ng-class="{'refund-step-cur':slideIndex == 2,'refund-step-done':slideIndex > 2}">
+					<dl>
+						<dt>
+							<strong>
+								<span class="refund-step-no">3</span>
+								<em class="refund-step-name">影像录入</em>
+							</strong>
+						</dt>
+						<dd class="refund-step-status"></dd>
+					</dl>
+				</li>
+				<li class="refund-step-bar" ng-class="{'refund-step-cur':slideIndex == 3,'refund-step-done':slideIndex > 3}">
+					<dl>
+						<dt>
+							<strong>
+								<span class="refund-step-no">4</span>
+								<em class="refund-step-name">保单预览</em>
+							</strong>
+						</dt>
+						<dd class="refund-step-status"></dd>
+					</dl>
+				</li>
+				<li class="refund-step-end" ng-class="{'refund-step-end-done':slideIndex == 4}">
+					<dl>
+						<dt>
+							<strong>
+								<span class="refund-step-no">5</span>
+								<em class="refund-step-name">保单提交</em>
+							</strong>
+						</dt>
+						<dd class="refund-step-status"></dd>
+					</dl>
+				</li>
+			</ol>
+		</div>
+	</div>
+
+	<ion-slide-box active-slide="myActiveSlide" on-slide-changed="slideChanged(index)" show-pager="false" class="insure-tabs" ng-init="disableSwipe()">
+		<ion-slide>
+			<div class="insure-tab-menu">
+				<ul class="nav nav-tabs" ng-init="step1.activeTab=1">
+					<li ng-class="{active: step1.activeTab == 1}"><a href="javascript:;">投保须知</a></li>
+					<li ng-class="{active: step1.activeTab == 2}"><a href="javascript:;">保险条款</a></li>
+					<li ng-class="{active: step1.activeTab == 3}"><a href="javascript:;">产品说明</a></li>
+				</ul>
+			</div>
+			<div class="tab-content tab-bordered">
+				<div class="tab-panel" ng-show="step1.activeTab == 1">
+					<ion-content class="has-top has-border padding" id="pdf-con">
+						<p>欢迎您选择民生人寿保险股份有限公司为您服务,在投保之前,敬请您阅读如下提示:</p>
+						<p>1.请您在投保之前详细阅读所投保险种的保险条款,特别提请您注意保险责任、责任免除、免赔额、比例 赔付或者给付、犹豫期和合同解除等条款内容。如投保健康保险,还需了解保险期间和续保、保险责任
+							等待期等内容。</p>
+						<p>2.依据《保险法》,投保人、被保险人在投保时,应对投保单、体检报告书以及其他投保问卷所提出的各项
+							询问事项如实详细地书面告知;否则,我公司有权依法解除保险合同,并对合同解除前发生的保险事故
+							不承担保险责任。</p>
+						<p>3.在审核您的投保申请过程中,我公司可能会要求被保险人、投保人进行体检或补充其他材料。根据核保
+							审核的有关情况,我公司可能会要求增加保险费、附加条件承保、延期承保或是拒绝承保。</p>
+						<p>4.若被保险人为未成年人,被保险人的累计身故保险金额总和不得超过保险监督管理机构规定的限额。</p>
+						<p>5.投保人、被保险人和受益人(如指定)资料栏所要求填写的客户信息,请您务必如实提供。上述信息将
+							用于计算保费、核保、寄送保单和客户回访等用途,如您提供的客户信息不真实、不完整,将有可能无
+							法有效获得我公司提供的服务,甚至导致保险合同的解除。您的联系电话和联系地址等发生变化时,请
+							及时办理变更手续。我公司承诺未经您同意,不会将客户信息用于我公司和第三方机构的销售活动。</p>
+
+						<p>6.本保险合同自我公司同意承保、收取首期保险费并签发保险单开始生效,自生效日零时起开始承担保险 责任。</p>
+						<div class="checkbox-agree item-checkbox">
+							<label class="checkbox">
+								<input class="checkbox-style" type="checkbox" ng-change="agree1(check1)" ng-model="check1.on">
+							</label>
+							<span>我同意</span>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step1.activeTab == 2">
+					<ion-content class="has-top has-border padding">
+						<div><iframe id="frame" width="100%" src="pdfjs_open/web/viewer.html?file=pdf/111301.pdf" scrolling="yes"></iframe></div>
+						<div class="checkbox-agree item-checkbox">
+							<label class="checkbox">
+								<input class="checkbox-style" type="checkbox" ng-change="agree2(check2)" ng-model="check2.on">
+							</label>
+							<span>我同意</span>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step1.activeTab == 3">
+					<ion-content class="has-top has-border padding">
+						<p>一、社会医疗保险和公费医疗获得补偿，本公司按我们会审核被保险人是否符合续保条件。如果我们审核同意续保，此后一个保证续保
+							期间内，您按时向我们交付续期的保险费，则本附加合同将延续有效；除上述自动不再续保情形以外我们不接受续保
+							的，我们会以书面形式通知您。</p>
+						<p>二，被保险人续保时年满六十五周岁每个保证续保期间届满时，我每个保证续保期间届满时，被保险人在本附加合同有效期内因遭受意外事故，需经本公司指定或认可的医疗机构进行必要的治疗，本公司对
+							其自事故发生之日起一百八十日内支出的必须且合理的实际医疗费用按下列约定给付保险金：</p>
+						<p>三，若在理赔时被保险人已从社会医疗保险或公费医疗获得补偿，本公司按照被保险人自事故发生之日起一百八十日
+							内支出的必须且合理的实际医疗费用扣除50元免赔额和被保险人从社会医疗保险、公费医疗、其他费用补偿型医疗保
+							险途径等累计已获得补偿后余额的100%向受益人给付意外伤害医疗保险金；</p>
+						<p>四，被保险人投保或续保时没有享有社会医疗保险和公费医疗保障的</p>
+						<p>五，若在理赔时被保险人没有从社会医疗保险和公费医疗获得补偿，本公司按照被保险人自事故发生之日起一百八十
+							日内支出的必须且合理的实际医疗费用扣除50元免赔额和被保险人从其他费用补偿型医疗保险途径等累计已获得补偿
+							后余额的80%向受益人给付意外伤害医疗保险金；</p>
+						<p>六，若在理赔时被保险人已从社会医疗保险或公费医疗获得补偿，本公司按照被保险人自事故发生之日起一百八十被保险人续保时年满六十五周岁每
+							个保证续保期间届满时，我每个保证续保期间届满时，被保险人续保时年满六十五周岁每个保证续保期间届满时，我每个保证续保期间届满时，
+							日被保险人续保时年满六十五周岁每个保证续保期间届满时，我每个保证续保期间届满时，</p>
+						<div class="checkbox-agree item-checkbox">
+							<label class="checkbox">
+								<input class="checkbox-style" type="checkbox" ng-change="agree3(check3)" ng-model="check3.on">
+							</label>
+							<span>我同意</span>
+						</div>
+					</ion-content>
+				</div>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="insure-tab-menu">
+				<ul class="nav nav-tabs clearfix" ng-init="step2.activeTab=1">
+					<li ng-class="{active: step2.activeTab == 1}"><a href="javascript:;">投保人信息</a></li>
+					<li ng-class="{active: step2.activeTab == 2}"><a href="javascript:;">被保人信息</a></li>
+					<li ng-class="{active: step2.activeTab == 3}"><a href="javascript:;">受益人信息</a></li>
+					<li ng-class="{active: step2.activeTab == 4}"><a href="javascript:;">投保事项</a></li>
+					<li ng-class="{active: step2.activeTab == 5}"><a href="javascript:;">投保人告知</a></li>
+					<li ng-class="{active: step2.activeTab == 6}"><a href="javascript:;">被保人告知</a></li>
+					<li ng-class="{active: step2.activeTab == 7}"><a href="javascript:;">业务员告知</a></li>
+					<li ng-class="{active: step2.activeTab == 8}"><a href="javascript:;">客户尽职调查</a></li>
+				</ul>
+			</div>
+			<div class="tab-content tab-bordered">
+				<div class="tab-panel" ng-show="step2.activeTab == 1">
+					<ion-content class="has-top">
+						<div class="has-border">
+							<div class="row">
+								<div class="col color-red">基本信息</div>
+								<input type="hidden" id="applicantID" value="018611018517140828170450031383"><!-- 投保人ID -->
+								<input type="hidden" id="recognizeeID" value="018611018517140905092857672355"><!-- 被保人ID -->
+								<div class="col text-right" ng-click="toCustomer()"><em class="insure-edit-icon"></em></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">姓名：</i><span id="a_name">{{applicantData.NAME}}</span></div>
+								<div class="col"><i class="color-gray">性别：</i><span id="a_sex">{{applicantData.SEX}}</span></div>
+								<div class="col"><i class="color-gray">出生日期：</i><span id="a_birthday">{{applicantData.BIRTHDAY}}<span></div>
+								<div class="col"><i class="color-gray">系被保险人：</i><span id="a_relation">{{applicantData.RELATION}}</span></div>
+							</div>
+
+							<div class="row">
+								<div class="col"><i class="color-gray">证件名称：</i><span id="a_id_name">{{applicantData.IDNAME}}</span></div>
+								<div class="col"><i class="color-gray">证件号码：</i><span id="a_id_no">{{applicantData.IDNO}}</span></div>
+								<div class="col"><i class="color-gray">有效期至：</i><span id="a_id_end_date">{{applicantData.ID_END_DATE}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">国籍：</i><span id="a_nation_place">{{applicantData.NATIVE_PLACE}}</span></div>
+								<div class="col"><i class="color-gray">户籍所在地：</i><span id="a_rgt_address">{{applicantData.RGT_ADDRESS}}</span></div>
+								<div class="col"><i class="color-gray">婚姻状况：</i><span id="a_marry">{{applicantData.MARRIY}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">年收入：</i><span id="a_income">{{applicantData.INCOME}}</span></div>
+								<div class="col"><i class="color-gray">主要收入来源：</i><span id="a_income_way">{{applicantData.INCOME_WAY}}</span></div>
+								<div class="col"><i class="color-gray">工作单位：</i><span id="a_work_unit">{{applicantData.WORK_UNIT}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">职业：</i><span id="a_occupation">{{applicantData.OCCUPATION}}</span></div>
+								<div class="col"><i class="color-gray">职位代码：</i><span id="a_occupation_code">{{applicantData.OCCUPATION_CODE}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">手机：</i><span id="a_mobile">{{applicantData.MOBILE}}</span></div>
+								<div class="col"><i class="color-gray">固定电话：</i><span id="a_phone">{{applicantData.PHONE}}</span></div>
+								<div class="col"><i class="color-gray">电子邮箱：</i><span id="a_email">{{applicantData.EMAIL}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">通信地址(收费地址)：</i><span id="a_mailing_address">{{applicantData.MAILING_ADDRESS}}</span></div>
+								<div class="col"><i class="color-gray">邮编：</i><span id="a_mailing_zip_code">{{applicantData.MAILING_ZIP_CODE}}</span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">住址：</i><span id="a_home_address">{{applicantData.HOME_ADDRESS}}</span></div>
+								<div class="col"><i class="color-gray">邮编：</i><span id="a_home_zip_code">{{applicantData.HOME_ZIP_CODE}}</span></div>
+							</div>
+						</div>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(2)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 2">
+					<ion-content class="has-top">
+						<div class="has-border">
+							<div class="row">
+								<div class="col color-red">基本信息</div>
+								<div class="col text-right"><em class="insure-edit-icon"></em></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">姓名：</i><span id="i_name"></span></div>
+								<div class="col"><i class="color-gray">性别：</i><span id="i_sex"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">证件名称：</i><span id="i_id_name"></span></div>
+								<div class="col"><i class="color-gray">证件号码：</i><span id="i_id_no"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">证件有效期至：</i><span id="i_id_end_date"></span></div>
+								<div class="col"><i class="color-gray">国籍：</i><span id="i_nation_place"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">出生日期：</i><span id="i_birthday"></span></div>
+								<div class="col"><i class="color-gray">婚姻状况：</i><span id="i_marry"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">户籍地址：</i><span id="i_rgt_address"></span></div>
+								<div class="col"><i class="color-gray">年收入：</i><span id="i_income"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">主要收入来源：</i><span id="i_income_way"></span></div>
+								<div class="col"><i class="color-gray">工作单位：</i><span id="i_work_unit"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">职业：</i><span id="i_occupation"></span></div>
+								<div class="col"><i class="color-gray">职位代码：</i><span id="i_occupation_code"></span></div>
+							</div>
+							 <div class="row">
+								<div class="col"><i class="color-gray">手机：</i><span id="i_mobile"></span></div>
+								<div class="col"><i class="color-gray">固定电话：</i><span id="i_phone"></span></div>
+								<div class="col"><i class="color-gray">电子邮箱：</i><span id="i_email"></span></div>
+							</div>
+							<div class="row">
+								<div class="col"><i class="color-gray">住址：</i><span id="i_home_address"></span></div>
+								<div class="col"><i class="color-gray">邮编：</i><span id="a_home_zip_code"></span></div>
+							</div>
+						</div>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(3)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 3">
+					<ion-content class="has-top">
+						<div class="row bg-gray">
+							<div class="col color-red">身故受益人</div>
+							<div class="col text-right">
+								<a class="insure-edit item-icon-left" href="#">
+									<i class="icon ion-insure-add"></i>
+									添加受益人
+								</a>
+								<a class="insure-edit item-icon-left" href="#">
+									<i class="icon ion-insure-moveout"></i>
+									移出
+								</a>
+							</div>
+						</div>
+						<div class="has-border">
+							<table class="info-table">
+								<tr>
+									<th>姓名</th>
+									<th>性别</th>
+									<th>出生日期</th>
+									<th>证件类型</th>
+									<th>证件号码</th>
+									<th>证件有效期</th>
+									<th>受益关系</th>
+									<th>受益顺序</th>
+									<th>受益比例</th>
+									<th>受益人住址</th>
+								</tr>
+								<tr>
+									<td>张丽</td>
+									<td>女</td>
+									<td>1988-11-98</td>
+									<td>身份证</td>
+									<td>14343243243234423432</td>
+									<td>2015-09-12</td>
+									<td>父女</td>
+									<td>1</td>
+									<td>50</td>
+									<td>北京朝阳区</td>
+								</tr>
+								<tr>
+									<td>张丽</td>
+									<td>女</td>
+									<td>1988-11-98</td>
+									<td>身份证</td>
+									<td>14343243243234423432</td>
+									<td>2015-09-12</td>
+									<td>父女</td>
+									<td>1</td>
+									<td>50</td>
+									<td>北京朝阳区</td>
+								</tr>
+							</table>
+						</div>
+						<div class="padding color-gray">
+							身故受益金若无指定人选，或者受益人指定不明无法确定的，保险金将作为被保险人遗产处理
+						</div>
+						<div class="row bg-gray">
+							<div class="col color-red">除身故保险金以外的其他保险金受益人</div>
+							<div class="col text-right">
+								<a class="insure-edit item-icon-left" href="#">
+									<i class="icon ion-insure-add"></i>
+									添加受益人
+								</a>
+								<a class="insure-edit item-icon-left" href="#">
+									<i class="icon ion-insure-moveout"></i>
+									移出
+								</a>
+							</div>
+						</div>
+						<div class="has-border">
+							<table class="info-table">
+								<tr>
+									<th>姓名</th>
+									<th>性别</th>
+									<th>出生日期</th>
+									<th>证件类型</th>
+									<th>证件号码</th>
+									<th>证件有效期</th>
+									<th>受益关系</th>
+									<th>受益顺序</th>
+									<th>受益比例</th>
+									<th>受益人住址</th>
+								</tr>
+								<tr>
+									<td>张丽</td>
+									<td>女</td>
+									<td>1988-11-98</td>
+									<td>身份证</td>
+									<td>14343243243234423432</td>
+									<td>2015-09-12</td>
+									<td>父女</td>
+									<td>1</td>
+									<td>50</td>
+									<td>北京朝阳区</td>
+								</tr>
+								<tr>
+									<td>张丽</td>
+									<td>女</td>
+									<td>1988-11-98</td>
+									<td>身份证</td>
+									<td>14343243243234423432</td>
+									<td>2015-09-12</td>
+									<td>父女</td>
+									<td>1</td>
+									<td>50</td>
+									<td>北京朝阳区</td>
+								</tr>
+							</table>
+						</div>
+						<div class="padding color-gray">
+							身故受益金若无指定人选，或者受益人指定不明无法确定的，保险金将作为被保险人遗产处理
+						</div>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(4)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 4">
+					<ion-content class="has-top">
+						<div class="has-border margin-top-15">
+							<table class="info-table">
+								<tr>
+									<th>险种ID</th>
+									<th>险种名称</th>
+									<th>保额/份数</th>
+									<th>保费</th>
+									<th>职业加费</th>
+									<th>交费期间</th>
+									<th>交费方式</th>
+									<th>保险期间</th>
+								</tr>
+								<tr>
+									<td>1122121</td>
+									<td>民生保险</td>
+									<td>100000元</td>
+									<td>100000元</td>
+									<td>0元</td>
+									<td>20年</td>
+									<td>年缴</td>
+									<td>10年</td>
+								</tr>
+								<tr>
+									<td>1122121</td>
+									<td>民生保险</td>
+									<td>100000元</td>
+									<td>100000元</td>
+									<td>0元</td>
+									<td>20年</td>
+									<td>年缴</td>
+									<td>10年</td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="has-border margin-top-15">
+							<div class="row bg-gray">
+								<div class="col color-red">交费方式</div>
+							</div>
+							<div class="padding">
+								<div class="row bg-white">
+									<div class="col col-34">
+										<div class="select-group">
+											<select>
+												<option selected>请选择交费方式</option>
+												<option>年缴</option>
+												<option>月缴</option>
+											</select>
+											<i class="input-arror-right ion-chevron-right"></i>
+										</div>
+									</div>
+								</div>
+								<div class="row bg-white margin-top-10">
+									<div class="col col-34">
+										<div class="select-group">
+											<select>
+												<option selected>请选择开户银行</option>
+												<option>年缴</option>
+												<option>月缴</option>
+											</select>
+											<i class="input-arror-right ion-chevron-right"></i>
+										</div>
+									</div>
+									<div class="col col-34">
+										<input class="text-style" type="text" placeholder="请输入银行卡号"/>
+									</div>
+									<div class="col col-25">
+										<input class="text-style" type="text" placeholder="户名"/>
+									</div>
+								</div>
+								<div class="insure-checkbox">
+									<div class="padding">续缴费时，是否需要缴费提示</div>
+									<div class="tip-check item-checkbox">
+										<label class="checkbox">
+											<input class="checkbox-style" type="checkbox" ng-change="agree()" ng-model="agree.on">
+										</label>
+										<span>续期保险费超过宽限期仍未交付时，是否选择保险费自动交付</span>
+									</div>
+									<div class="tip-check item-checkbox">
+										<label class="checkbox">
+											<input class="checkbox-style" type="checkbox" ng-change="agree()" ng-model="agree.on">
+										</label>
+										<span>是否选择电子保单服务</span>
+									</div>
+								</div>
+								<div class="row bg-white">
+									<div class="col col-34">
+										<input class="text-style" type="text" placeholder="请输入手机号"/>
+									</div>
+									<div class="col col-66 color-gray">
+										我们将提取保单的验证信息发送至您的手机，请确保手机号码无误
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="has-border margin-top-15">
+							<div class="row bg-gray">
+								<div class="col color-red">祝福语</div>
+							</div>
+							<div class="padding">
+								<div class="row bg-white">
+									<div class="col col-34">
+										<div class="select-group">
+											<select>
+												<option selected>请选择祝福语</option>
+												<option>恭喜发财</option>
+												<option>生日快乐</option>
+											</select>
+											<i class="input-arror-right ion-chevron-right"></i>
+										</div>
+									</div>
+								</div>
+								<div class="padding">
+									<textarea class="text-style" placeholder="内容"></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(5)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+
+				<div class="tab-panel" ng-show="step2.activeTab == 5">
+					<ion-content class="has-top has-border padding">
+						<div id="applicant_know">
+						</div>
+						<br/>
+						<br/>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(6)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 6">
+					<ion-content class="has-top has-border padding">
+						<div id="recognizee_know">
+						</div>
+						<br/>
+						<br/>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(7)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 7">
+					<ion-content class="has-top has-border padding">
+						<div id="agent_know">
+						</div>
+						<br/>
+						<br/>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(8)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step2.activeTab == 8">
+					<ion-content class="has-top has-border padding">
+						<div id="customer_know">
+						</div>
+						<br/>
+						<br/>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="clickTab2(9)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="insure-tab-menu">
+				<ul class="nav nav-tabs" ng-init="step3.activeTab=1">
+					<li ng-class="{active: step3.activeTab == 1}"><a href="javascript:;">投保人证</a></li>
+					<li ng-class="{active: step3.activeTab == 2}"><a href="javascript:;">被保人证</a></li>
+					<li ng-class="{active: step3.activeTab == 3}"><a href="javascript:;">受益人证</a></li>
+				</ul>
+			</div>
+			<div class="tab-content tab-bordered">
+				<div class="tab-panel" ng-show="step3.activeTab == 1">
+					<ion-content class="has-top has-border padding">
+						<p>注：<br/>
+							一、证件类型为“身份证”的，原件正反两面都须分别拍摄上传。 <br/>
+							二、被保人身份证为“出生医学证明”需同事上传其“出生证明”影像。<br/>
+							三、投、被保人提供的证件为“户口薄”时且无法提供身份证号码，需同时上传其“户口薄”中“常住人口登记卡页”影像。<br/>
+							四、根据反洗钱法规定，整单保费大于2万（含)、转账大于20万（含）时，需上传投。被保人有效证件影像。<br/>
+							五、身故受益人关系不为：父亲、母亲、丈夫、妻子、儿子、女儿、等直系亲属时，需上传身故受益人有效证件影像。
+						</p>
+						<ul class="camara">
+							<li ng-click="goAction($event,'front-tbr')">
+								<img ng-src="{{tbrFront}}" alt=""/>
+								<span>证件正面</span>
+							</li>
+							<li ng-click="goAction($event,'back-tbr')">
+								<img ng-src="{{tbrBack}}" alt=""/>
+								<span>证件反面</span>
+							</li>
+						</ul>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="saveTbr(2)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step3.activeTab == 2">
+					<ion-content class="has-top has-border padding">
+						<p>注：<br/>
+							一、证件类型为“身份证”的，原件正反两面都须分别拍摄上传。 <br/>
+							二、被保人身份证为“出生医学证明”需同事上传其“出生证明”影像。<br/>
+							三、投、被保人提供的证件为“户口薄”时且无法提供身份证号码，需同时上传其“户口薄”中“常住人口登记卡页”影像。<br/>
+							四、根据反洗钱法规定，整单保费大于2万（含)、转账大于20万（含）时，需上传投。被保人有效证件影像。<br/>
+							五、身故受益人关系不为：父亲、母亲、丈夫、妻子、儿子、女儿、等直系亲属时，需上传身故受益人有效证件影像。
+						</p>
+						<ul class="camara">
+							<li ng-click="goAction($event,'front-bbr')">
+								<img ng-src="{{bbrFront}}" alt=""/>
+								<span>证件正面</span>
+							</li>
+							<li ng-click="goAction($event,'back-bbr')">
+								<img ng-src="{{bbrBack}}" alt=""/>
+								<span>证件反面</span>
+							</li>
+						</ul>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="saveBbr(3)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+				<div class="tab-panel" ng-show="step3.activeTab == 3">
+					<ion-content class="has-top has-border padding">
+						<p>注：<br/>
+							一、证件类型为“身份证”的，原件正反两面都须分别拍摄上传。 <br/>
+							二、被保人身份证为“出生医学证明”需同事上传其“出生证明”影像。<br/>
+							三、投、被保人提供的证件为“户口薄”时且无法提供身份证号码，需同时上传其“户口薄”中“常住人口登记卡页”影像。<br/>
+							四、根据反洗钱法规定，整单保费大于2万（含)、转账大于20万（含）时，需上传投。被保人有效证件影像。<br/>
+							五、身故受益人关系不为：父亲、母亲、丈夫、妻子、儿子、女儿、等直系亲属时，需上传身故受益人有效证件影像。
+						</p>
+						<ul class="camara">
+							<li ng-click="goAction($event,'front-syr')">
+								<img ng-src="{{syrFront}}" alt=""/>
+								<span>证件正面</span>
+							</li>
+							<li ng-click="goAction($event,'back-syr')">
+								<img ng-src="{{syrBack}}" alt=""/>
+								<span>证件反面</span>
+							</li>
+						</ul>
+						<br/>
+						<div class="content-bottom">
+							<button class="btn-save" ng-click="saveSyr(3)">保 存</button>
+						</div>
+					</ion-content>
+				</div>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<ion-content class="padding">
+				<div class="has-border">
+					<div class="row">
+						<div class="col color-red">投保人信息</div>
+						<div class="col"></div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">姓名：</i>李新新</div>
+						<div class="col"><i class="color-gray">性别：</i>女</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">出生日期：</i>1988-11-29</div>
+						<div class="col"><i class="color-gray">系被保人：</i>本人</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">客户学历：</i>本科</div>
+						<div class="col"><i class="color-gray">婚姻状况：</i>未婚</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">客户国籍：</i>中国</div>
+						<div class="col"><i class="color-gray">户籍地址：</i>北京朝阳区</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">证件类型：</i>身份证</div>
+						<div class="col"><i class="color-gray">民族：</i>汉</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">证件号码：</i>4329432432432432432432432</div>
+						<div class="col"><i class="color-gray">证件有效期：</i>1988-34-87</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">年收入：</i>20万</div>
+						<div class="col"><i class="color-gray">主要收入来源：</i>工薪</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">工作单位：</i>北京公司</div>
+						<div class="col"><i class="color-gray">兼职：</i>无</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">职业：</i>教师</div>
+						<div class="col"><i class="color-gray">职位代码：</i>34543</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">回访电话：</i>8787897</div>
+						<div class="col"><i class="color-gray">手机号码：</i>8787897</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">固定电话：</i>8787897</div>
+						<div class="col"><i class="color-gray">电子邮箱：</i>aa@163.com</div>
+					</div>
+				</div>
+				<div class="has-border margin-top-15">
+					<div class="row">
+						<div class="col color-red">被保人信息</div>
+						<div class="col"></div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">姓名：</i>李新新</div>
+						<div class="col"><i class="color-gray">性别：</i>女</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">出生日期：</i>1988-11-29</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">客户学历：</i>本科</div>
+						<div class="col"><i class="color-gray">婚姻状况：</i>未婚</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">客户国籍：</i>中国</div>
+						<div class="col"><i class="color-gray">户籍地址：</i>北京朝阳区</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">证件类型：</i>身份证</div>
+						<div class="col"><i class="color-gray">民族：</i>汉</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">证件号码：</i>4329432432432432432432432</div>
+						<div class="col"><i class="color-gray">证件有效期：</i>1988-34-87</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">年收入：</i>20万</div>
+						<div class="col"><i class="color-gray">主要收入来源：</i>工薪</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">工作单位：</i>北京公司</div>
+						<div class="col"><i class="color-gray">兼职：</i>无</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">职业：</i>教师</div>
+						<div class="col"><i class="color-gray">职位代码：</i>34543</div>
+					</div>
+					<div class="row">
+						<div class="col"><i class="color-gray">回访电话：</i>8787897</div>
+						<div class="col"><i class="color-gray">手机号码：</i>8787897</div>
+					</div>
+				</div>
+			</ion-content>
+		</ion-slide>
+		<ion-slide>
+			<div class="insure-submit">
+				<input class="text-style text-center" id="printNo1" type="text" ng-model="printNo1" placeholder="请输入电子投保申请确认书的印刷号"/>
+				<br/>
+				<input class="text-style text-center" id="printNo2" type="text" ng-model="printNo2" placeholder="请再次输入电子投保申请确认书的印刷号"/>
+			</div>
+
+			<div class="content-bottom">
+				<button class="btn-save" ng-click="commitInsurance();">保 存</button>
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+
+	<div class="bar bar-footer footer-btn-bar">
+		<div class="footer-btns">
+			<button class="button button-light-red footer-btn pull-left" ng-click="PrevStep(slideIndex)" ng-class="{'hide':slideIndex == 0||slideIndex == undefined}">上一步</button>
+			<button class="button button-light-red footer-btn pull-right" ng-click="NextStep(slideIndex)" ng-class="{'button-light-grey':slideIndex == 0||slideIndex == undefined}">下一步</button>
+		</div>
+	</div>
+</ion-view>
